@@ -10,6 +10,14 @@ services:
     depends_on:
       postgres:
         condition: service_started
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 1G
+        reservations:
+          cpus: 0.5
+          memory: 500M
     env_file:
       - path: .env
         required: true
@@ -18,19 +26,19 @@ services:
       - isolated
     ports:
       - ${ADMINER_PORT:-8080}:8080
-    deploy:
-      resources:
-        limits:
-          cpus: 1.0
-          memory: 1G
-        reservations:
-          cpus: 0.5
-          memory: 500M
     restart: unless-stopped
     stdin_open: false
     tty: false
 
   postgres:
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 1G
+        reservations:
+          cpus: 0.5
+          memory: 500M
     env_file:
       - path: .env
         required: true
@@ -43,14 +51,6 @@ services:
       - isolated
     ports:
       - ${POSTGRES_PORT:-5432}:5432
-    deploy:
-      resources:
-        limits:
-          cpus: 1.0
-          memory: 1G
-        reservations:
-          cpus: 0.5
-          memory: 500M
     restart: unless-stopped
     stdin_open: false
     tty: false

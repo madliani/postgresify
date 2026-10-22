@@ -6,7 +6,8 @@ networks:
     internal: true
 
 services:
-  adminer:
+  pgAdmin:
+    container_name: pgadmin4
     depends_on:
       postgres:
         condition: service_started
@@ -21,16 +22,20 @@ services:
     env_file:
       - path: .env
         required: true
-    image: adminer:5.5.0
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:?}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:?}
+    image: dpage/pgadmin4:9.17
     networks:
       - isolated
     ports:
-      - ${ADMINER_PORT:-8080}:8080
+      - ${PGADMIN_PORT:-8080}:80
     restart: unless-stopped
     stdin_open: false
     tty: false
 
   postgres:
+    container_name: postgres18
     deploy:
       resources:
         limits:
